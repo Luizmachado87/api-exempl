@@ -11,3 +11,6 @@ def test_post_dados():
     response = requests.post(BASE_URL, json=payload)
     assert response.status_code == 201
     assert response.json()["dado"] == payload
+
+
+##Teste
