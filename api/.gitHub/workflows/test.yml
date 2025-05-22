@@ -1,0 +1,54 @@
+name: Run Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-node:
+    if: ${{ hashFiles('package.json') != '' }}
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - run: npm install
+    - run: npx jest
+
+  test-python:
+    if: ${{ hashFiles('**/*.py') != '' }}
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - run: pip install requests pytest
+    - run: pytest
+
+  test-java:
+    if: ${{ hashFiles('**/*.java') != '' }}
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Compile and run tests
+      run: |
+        mkdir -p bin
+        javac -d bin $(find . -name "*.java")
+        java -cp bin org.junit.platform.console.ConsoleLauncher --scan-class-path

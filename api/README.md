@@ -12,3 +12,12 @@ git clone https://github.com/seu-usuario/api-exemplo.git
 cd api-exemplo
 npm install
 npm start
+
+## Para rodar
+
+npm install --save-dev jest supertest
+npx jest
+
+
+pytest test_api.py
+
